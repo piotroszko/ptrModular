@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Il2Cpp;
+using PtrLib.Items;
 using PtrLib.Mod;
 using PtrLib.Ui;
 using UnityEngine;
@@ -209,7 +210,7 @@ internal sealed class ServerAssemblyModule : PtrModule
             return null;
         if (usable.objectInHands) return null;
 
-        ServerComponentRegistry.NormalizeExisting(usable);
+        ModItemRegistry.NormalizeExisting(usable);
         return GetOrCreateState(usable.gameObject);
     }
 
@@ -237,7 +238,7 @@ internal sealed class ServerAssemblyModule : PtrModule
         {
             var usable = usableObjects[i];
             if (usable == null || usable.gameObject == null) continue;
-            ServerComponentRegistry.NormalizeExisting(usable);
+            ModItemRegistry.NormalizeExisting(usable);
             if (usable.gameObject == state.Case) continue;
 
             string folder = usable.modFolderName;

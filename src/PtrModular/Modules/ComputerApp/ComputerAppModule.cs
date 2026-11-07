@@ -1,4 +1,4 @@
-using System;
+using PtrLib.Items;
 using PtrLib.Mod;
 using PtrLib.PcApps;
 
@@ -10,9 +10,9 @@ internal sealed class ComputerAppModule : PtrModule
     private const string AppLabel = "Server Builder";
     private const string IconName = "Icon Server Builder bcg";
 
-    private HarmonyLib.Harmony? _harmony;
     private ServerBuilderApp? _app;
     private bool _appRegistered;
+    private bool _itemsRegistered;
 
     public override string Id => "ComputerApp";
     public override string DisplayName => "Server Builder";
@@ -20,16 +20,10 @@ internal sealed class ComputerAppModule : PtrModule
 
     public override void OnInitialize()
     {
-        try
+        if (!_itemsRegistered)
         {
-            _harmony = new HarmonyLib.Harmony("PtrModular.ServerComponents");
-            _harmony.PatchAll(typeof(ServerComponentPrefabPatch));
-        }
-        catch (Exception exception)
-        {
-            Context.Log.Warning($"Server component prefab patch could not be installed: {exception}");
-            _harmony?.UnpatchSelf();
-            _harmony = null;
+            _itemsRegistered = true;
+            ModItemRegistry.Register(ServerComponentCatalog.All);
         }
 
         if (_appRegistered) return;
@@ -46,12 +40,5 @@ internal sealed class ComputerAppModule : PtrModule
     public override void OnGameplayEnter()
     {
         _app = null;
-        ServerComponentRegistry.Reset();
-    }
-
-    public override void OnShutdown()
-    {
-        _harmony?.UnpatchSelf();
-        _harmony = null;
     }
 }
