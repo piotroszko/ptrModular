@@ -2,6 +2,7 @@ using System;
 using Il2Cpp;
 using Il2CppTMPro;
 using PtrLib.Diagnostics;
+using PtrLib.PcApps;
 using PtrLib.Ui;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,70 +12,40 @@ namespace PtrModular.Modules;
 
 internal sealed class ServerBuilderApp
 {
-    private const string PanelName = "ServerBuilderApp";
-
     private static int _spawnSequence;
 
     private readonly ComputerShop _shop;
     private readonly ModuleLog _log;
-    private readonly GameObject _panel;
     private readonly TextMeshProUGUI _status;
 
-
-    private ServerBuilderApp(
-        ComputerShop shop,
-        ModuleLog log,
-        GameObject panel,
-        TextMeshProUGUI status)
+    private ServerBuilderApp(ComputerShop shop, ModuleLog log, TextMeshProUGUI status)
     {
         _shop = shop;
         _log = log;
-        _panel = panel;
         _status = status;
     }
 
-    internal GameObject Panel => _panel;
-
-    internal static ServerBuilderApp? Create(
-        ComputerShop shop,
-        GameObject mainScreen,
-        TextMeshProUGUI textTemplate,
-        ButtonExtended buttonTemplate,
-        ModuleLog log)
+    internal static ServerBuilderApp Build(PcAppContext context)
     {
-        var parent = mainScreen.transform.parent;
-        if (parent == null)
-        {
-            log.Error("Computer desktop root was not found; Server Builder was not installed.");
-            return null;
-        }
+        var shop = context.Shop;
+        var panel = context.Panel;
+        var log = context.Log;
 
-        var canvas = mainScreen.GetComponentInParent<Canvas>();
+        var canvas = context.MainScreen.GetComponentInParent<Canvas>();
         log.Msg(
             $"Computer desktop canvas: {(canvas != null ? canvas.renderMode.ToString() : "<none>")}, " +
-            $"screen='{mainScreen.name}'.");
+            $"screen='{context.MainScreen.name}'.");
 
         var buyTemplate = shop.buttonCheckOut;
         if (buyTemplate == null)
         {
             log.Warning("Shop checkout button was not found; using the return button for Buy.");
-            buyTemplate = buttonTemplate;
+            buyTemplate = context.ButtonTemplate;
         }
-
-        var panel = UiFactory.CreatePanel(
-            parent,
-            mainScreen,
-            PanelName,
-            new Color(0.02f, 0.04f, 0.06f, 0.98f));
-
-        UiFactory.Stretch(
-            panel.GetComponent<RectTransform>(),
-            new Vector2(10f, 10f),
-            new Vector2(-10f, -10f));
 
         var title = UiFactory.CreateText(
             panel.transform,
-            textTemplate,
+            context.TextTemplate,
             "Server Builder",
             40f,
             TextAlignmentOptions.TopLeft,
@@ -84,7 +55,7 @@ internal sealed class ServerBuilderApp
 
         var status = UiFactory.CreateText(
             panel.transform,
-            textTemplate,
+            context.TextTemplate,
             string.Empty,
             20f,
             TextAlignmentOptions.Left,
@@ -92,7 +63,7 @@ internal sealed class ServerBuilderApp
             Vector2.zero);
         UiFactory.SetTopLeft(status.rectTransform, new Vector2(1200f, 32f), new Vector2(60f, -100f));
 
-        var app = new ServerBuilderApp(shop, log, panel, status);
+        var app = new ServerBuilderApp(shop, log, status);
 
         for (int i = 0; i < ServerComponentCatalog.All.Length; i++)
         {
@@ -101,7 +72,7 @@ internal sealed class ServerBuilderApp
 
             var name = UiFactory.CreateText(
                 panel.transform,
-                textTemplate,
+                context.TextTemplate,
                 component.Label,
                 28f,
                 TextAlignmentOptions.Left,
@@ -111,7 +82,7 @@ internal sealed class ServerBuilderApp
 
             var price = UiFactory.CreateText(
                 panel.transform,
-                textTemplate,
+                context.TextTemplate,
                 $"${component.Price}",
                 24f,
                 TextAlignmentOptions.Left,
@@ -131,7 +102,7 @@ internal sealed class ServerBuilderApp
             {
                 var buyText = UiFactory.CreateText(
                     buy.transform,
-                    textTemplate,
+                    context.TextTemplate,
                     "Buy",
                     20f,
                     TextAlignmentOptions.Center,
@@ -146,16 +117,6 @@ internal sealed class ServerBuilderApp
             buy.onClick.AddListener((UnityAction)(Action)(() => app.Buy(definition)));
         }
 
-        var back = UiFactory.CreateButton(buttonTemplate, panel.transform, "Button Back");
-        UiFactory.SetTopRight(
-            back.GetComponent<RectTransform>(),
-            new Vector2(140f, 40f),
-            new Vector2(-20f, -20f));
-        UiFactory.SetButtonLabel(back, "Back");
-        back.gameObject.SetActive(true);
-        back.onClick.AddListener((UnityAction)(Action)(app.Close));
-
-        panel.SetActive(false);
         return app;
     }
 
@@ -164,21 +125,10 @@ internal sealed class ServerBuilderApp
         if (_shop.mainScreen == null)
             return;
 
-        _shop.ButtonReturnMainScreen();
-        _shop.mainScreen.SetActive(false);
-        _panel.SetActive(true);
-
         ServerComponentRegistry.Refresh();
         SetStatus(ServerComponentRegistry.ResolvedCount == ServerComponentCatalog.All.Length
             ? "Prices are $0 for this phase. Buy a component to spawn it on the shop floor."
             : $"Loaded {ServerComponentRegistry.ResolvedCount}/{ServerComponentCatalog.All.Length} components; check the MelonLoader log.");
-    }
-
-    internal void Close()
-    {
-        _panel.SetActive(false);
-        if (_shop.mainScreen != null)
-            _shop.mainScreen.SetActive(true);
     }
 
 
