@@ -1,0 +1,19 @@
+{
+  "modName": "PtrModular Server Components",
+  "shopItems": [
+    {
+      "itemName": "CPU",
+      "price": 0,
+      "xpToUnlock": 0,
+      "sizeInU": 1,
+      "mass": 0.2,
+      "objectType": "Router",
+      "iconFile": "icon.png",
+      "modelFile": "model.obj",
+      "textureFile": "texture.png",
+      "modelScale": 1.0,
+      "colliderCenter": [0.0, 0.01, 0.0],
+      "colliderSize": [0.06, 0.02, 0.06]
+    }
+  ]
+}

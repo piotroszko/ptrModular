@@ -1,0 +1,19 @@
+{
+  "modName": "PtrModular Server Components",
+  "shopItems": [
+    {
+      "itemName": "Motherboard",
+      "price": 0,
+      "xpToUnlock": 0,
+      "sizeInU": 1,
+      "mass": 1.5,
+      "objectType": "Router",
+      "iconFile": "icon.png",
+      "modelFile": "model.obj",
+      "textureFile": "texture.png",
+      "modelScale": 1.0,
+      "colliderCenter": [0.0, 0.01, 0.0],
+      "colliderSize": [0.3, 0.02, 0.35]
+    }
+  ]
+}
