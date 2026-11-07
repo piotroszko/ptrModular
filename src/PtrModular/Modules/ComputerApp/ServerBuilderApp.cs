@@ -129,7 +129,7 @@ internal sealed class ServerBuilderApp
 
         ModItemRegistry.Refresh();
         SetStatus(ModItemRegistry.ResolvedCount == ServerComponentCatalog.All.Length
-            ? "Prices are $0 for this phase. Buy a component to spawn it on the shop floor."
+            ? "Prices are $0 for this phase. Buy a component to have it delivered."
             : $"Loaded {ModItemRegistry.ResolvedCount}/{ServerComponentCatalog.All.Length} components; check the MelonLoader log.");
     }
 
