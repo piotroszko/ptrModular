@@ -111,6 +111,10 @@ internal sealed class ServerBuilderApp
                 buyText.raycastTarget = false;
                 buyText.transform.SetAsLastSibling();
             }
+            UiFactory.SetButtonColors(
+                buy,
+                new Color(0.10f, 0.42f, 0.62f, 1f),
+                Color.white);
             buy.gameObject.SetActive(true);
 
             var definition = component;
