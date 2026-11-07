@@ -1,6 +1,7 @@
 using System;
 using MelonLoader;
-using PtrModular.Ui;
+using PtrLib.Ui;
+using PtrLib.Mod;
 using PtrModular.Modules;
 
 [assembly: MelonInfo(typeof(PtrModular.Mod.PtrModularMod), PtrModular.Mod.ModInfo.Name, PtrModular.Mod.ModInfo.Version, PtrModular.Mod.ModInfo.Author)]
@@ -18,7 +19,7 @@ public sealed class PtrModularMod : MelonMod
 
         try
         {
-            _host = new ModuleHost(LoggerInstance, new WindowManager());
+            _host = new ModuleHost(ModInfo.Name, LoggerInstance, new WindowManager());
             foreach (var module in CreateModules())
                 _host.Register(module);
             _host.Initialize();

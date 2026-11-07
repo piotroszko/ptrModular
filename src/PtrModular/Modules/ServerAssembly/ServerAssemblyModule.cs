@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Il2Cpp;
-using PtrModular.Mod;
-using PtrModular.Ui;
+using PtrLib.Mod;
+using PtrLib.Ui;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,11 +46,11 @@ internal sealed class ServerAssemblyModule : PtrModule
     private readonly Dictionary<int, Color[]> _highlightColors =
         new Dictionary<int, Color[]>();
 
-    internal override string Id => "ServerAssembly";
-    internal override string DisplayName => "Server Assembly";
-    internal override bool EnabledByDefault => true;
+    public override string Id => "ServerAssembly";
+    public override string DisplayName => "Server Assembly";
+    public override bool EnabledByDefault => true;
 
-    internal override void OnGameplayEnter()
+    public override void OnGameplayEnter()
     {
         _open = null;
         _near = null;
@@ -62,7 +62,7 @@ internal sealed class ServerAssemblyModule : PtrModule
         _nextVisualScan = 0f;
     }
 
-    internal override void OnUpdate()
+    public override void OnUpdate()
     {
         if (!Context.InGameplay) return;
 
@@ -111,7 +111,7 @@ internal sealed class ServerAssemblyModule : PtrModule
             OpenAssembly(aimed);
     }
 
-    internal override void OnGui()
+    public override void OnGui()
     {
         if (!Context.InGameplay) return;
 

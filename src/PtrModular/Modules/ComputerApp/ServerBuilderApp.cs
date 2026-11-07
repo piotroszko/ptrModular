@@ -1,8 +1,8 @@
 using System;
 using Il2Cpp;
 using Il2CppTMPro;
-using PtrModular.Diagnostics;
-using PtrModular.Ui;
+using PtrLib.Diagnostics;
+using PtrLib.Ui;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

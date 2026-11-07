@@ -1,7 +1,7 @@
 using System;
 using Il2Cpp;
-using PtrModular.Mod;
-using PtrModular.Ui;
+using PtrLib.Mod;
+using PtrLib.Ui;
 using Il2CppTMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,11 +18,11 @@ internal sealed class ComputerAppModule : PtrModule
     private ComputerShop? _shop;
     private ServerBuilderApp? _app;
     private bool _warned;
-    internal override string Id => "ComputerApp";
-    internal override string DisplayName => "Server Builder";
-    internal override bool EnabledByDefault => true;
+    public override string Id => "ComputerApp";
+    public override string DisplayName => "Server Builder";
+    public override bool EnabledByDefault => true;
 
-    internal override void OnInitialize()
+    public override void OnInitialize()
     {
         try
         {
@@ -37,7 +37,7 @@ internal sealed class ComputerAppModule : PtrModule
         }
     }
 
-    internal override void OnGameplayEnter()
+    public override void OnGameplayEnter()
     {
         _shop = null;
         _app = null;
@@ -45,7 +45,7 @@ internal sealed class ComputerAppModule : PtrModule
         ServerComponentRegistry.Reset();
     }
 
-    internal override void OnUpdate()
+    public override void OnUpdate()
     {
 
 
@@ -76,7 +76,7 @@ internal sealed class ComputerAppModule : PtrModule
         Install(_shop);
     }
 
-    internal override void OnShutdown()
+    public override void OnShutdown()
     {
         _harmony?.UnpatchSelf();
         _harmony = null;
